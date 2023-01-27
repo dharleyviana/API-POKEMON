@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista de Pokemons</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+  </style>
+</head>
+<body>
+  <h1>LISTA DE POKEMONS</h1>
+  <ul id="pokemons-list"></ul>
+  <script>
+    const API_URL = 'https://pokeapi.co/api/v2/pokemon/';
+
+    async function getPokemons() {
+      const response = await fetch(`${API_URL}?limit=151`);
+      const data = await response.json();
+      const pokemons = data.results;
+
+      const pokemonsList = document.getElementById('pokemons-list');
+      pokemons.forEach(async (pokemon) => {
+        const res = await fetch(pokemon.url);
+        const pokeData = await res.json();
+        const pokemonItem = document.createElement('li');
+        const pokemonImg = document.createElement('img');
+        pokemonImg.src = pokeData.sprites.front_default;
+        pokemonImg.alt = pokemon.name;
+
+        
+        pokemonItem.appendChild(pokemonImg);
+        pokemonItem.appendChild(document.createTextNode(pokemon.name));
+        pokemonsList.appendChild(pokemonItem);
+      });
+    }
+    getPokemons();
+  </script>
+</body>
+</html>
+
